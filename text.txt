@@ -1,3 +1,22 @@
+heroku:ronysharif@yahoo.com
+github:abul0021@stud.kea.dk
+mongoDB:ronysharif@yahoo.com
+
+mongodb+srv://omarsharif:omar2204@sharifkea.pi8df.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+testdb->collone
+
+
 extension=php_mongodb.dll
 downL: 8.1 Thread Safe (TS) x64
 $ composer require mongodb/mongodb
+
+heroku login
+$ heroku git:clone -a mdbtestsharif 
+$ cd mdbtestsharif
+
+git add .
+git commit -am "make it better"
+git push heroku HEAD:master
+
+https://mdbtestsharif.herokuapp.com/
+
