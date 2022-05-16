@@ -1,6 +1,9 @@
 <?php
+	session_start();
 	require_once __DIR__ . '/vendor/autoload.php';
-	$client = new MongoDB\Client(
+	$murl=$_SESSION['txtMurl'];
+	$client = new MongoDB\Client($murl);
+	/*$client = new MongoDB\Client(
 		'mongodb+srv://omarsharif:omar2204@sharifkea.pi8df.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 		//'mongodb+srv://ronysharif:rony2204@sharifmdb.px3qb.mongodb.net/flight_booking?retryWrites=true&w=majority');
 		//'mongodb+srv://ronysharif:rony2204@sharifmdb.px3qb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');

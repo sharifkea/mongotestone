@@ -1,5 +1,5 @@
 <?php
-require('auth.php');
+require_once('auth.php');
 error_reporting(E_ERROR | E_PARSE);
  
 ?>

@@ -1,7 +1,8 @@
 
 <?php
 session_start();
-if(!isset($_SESSION["txtMurl"])){
-header("Location: ../index.php");
+//var_dump($_SESSION);
+if(!isset($_SESSION['Murl'])){
+header("Location: index.php");
 exit(); }
 ?>

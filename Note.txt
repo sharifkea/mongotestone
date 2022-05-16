@@ -1,0 +1,293 @@
+<?php
+include_once ("header.php");
+require_once('fun.php');
+require_once('add.php');
+if (isset($_POST['num_fields'])) {
+
+    if(checkTN($_SESSION,$_POST['tableName'])){
+        //echo 'Table Name: '. $_POST['tableName'];
+        $data['tableInfo']=$_POST['tableName'];
+        $data['columnNo']=$_POST['fields'];
+        $data['fkNo']=0;
+        $data['lastId']=0;
+        //$_SESSION['tbData']=$data;
+        $num_filds=$_POST['fields'];
+        do{
+            if(isset($post))$post=tbform($post,$num_filds);
+            else $post=tbform($num_filds);
+            $retForm=form($post,$num_filds);
+            switch ($retForm) {
+                case 'pkc1':
+                    ?>
+                    <script>
+                        alert("A table can have only one Primary Key.");
+                    </script>
+                    <?php  
+                  break;
+                  case 'pkc2':
+                    ?>
+                    <script>
+                        alert("A table must have a Primary Key.");
+                    </script>
+                    <?php  
+                  break;
+                  case 'nlc1':
+                    ?>
+                    <script>
+                        alert("Primary Key must be Not Null.");
+                    </script>
+                    <?php  
+                  break;
+                  case 'aic1':
+                    ?>
+                    <script>
+                        alert("A table can have only one auto increase.");
+                    </script>
+                    <?php  
+                  break;
+                  case 'aic2':
+                    ?>
+                    <script>
+                        alert("only Primary Key can have auto increase.");
+                    </script>
+                    <?php  
+                  break;
+                  case 'aic3':
+                    ?>
+                    <script>
+                        alert("Data Type mast be 'Int' for auto increase.");
+                    </script>
+                    <?php  
+                  break;
+                default:
+                  echo "Your favorite color is neither red, blue, nor green!";
+            }
+        
+        }while(gettype($retForm)=='string');
+    }
+    else{
+        unset($_POST); ?>
+        <script>
+            alert("A Table already exists with this name, try with another Name");
+            window.location.href ='model.php';
+        </script>
+        <?php
+       
+        //header("Location: createTB.php");
+    }
+
+}else{
+    ?>
+        <div id="table_name_col_no_outer">
+            <form action='' id="tbNm" method="POST">
+                <table id="table_name_col_no" class="pma-table tdblock">
+                    <tbody>
+                        <tr class="vmiddle floatleft">
+                            <td>Table name:
+                            <input type="text" name="tableName" size="40" maxlength="64" value="" class="textfield" autofocus="" required="">
+                            </td>
+                            <td>
+                                Add<input type="number" id="added_fields" name="fields" size="2" value="1" min="1" onfocus="this.select()">
+                                column(s)<input class="btn btn-secondary" type="submit" name="num_fields" value="Go">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+<?php
+    
+
+    }
+    ?>
+    <a class=""  href='home.php'>>Back<</a>
+    <?php
+    include_once('footer.php');
+    
+    
+    
+    
+    /* <button onclick="myFunction()">Try it</button>
+        <input type="submit" name="crtDB" value="Create DB">
+        <script>
+        </script>
+        <script >
+           
+        </script>
+        <script type="text/javascript">
+            
+        function myFunction() {
+            var javaScriptVar = "<?php echo $_POST['crtDB']; ?>";
+            console.log(javaScriptVar);
+            alert("Hello! I am an alert box!");
+        }
+        </script>
+        */
+
+
+
+
+<?php
+  session_start();
+  if(isset($_SESSION['txtMurl'])){
+    header('Location: home.php');
+  }
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css" />
+    <title>login</title>
+  </head>
+  <body>
+      <header>
+          <h1>Welcome to Relational MongoDB</h1>
+      </header>	
+      <?php
+        if (isset($_POST['txtMurl'])&&isset($_POST['document'])&&isset($_POST['collection'])){
+          $coll=$_POST['collection'];
+          $doc=$_POST['document'];
+        require_once __DIR__ . '/vendor/autoload.php';
+        $client = new MongoDB\Client($_POST['txtMurl']);
+        $db = $client->$doc->$coll;
+        try {
+            $returnMdb = $db->findOne();
+            if(isset($returnMdb)){
+                echo 'table is  there.';
+                $_SESSION=$_POST; 
+                header('Location: home.php');
+            }
+            else {
+              echo 'Not connected to Database.';
+              ?><br><a class=""  href='logout.php'>Try Again</a><?php
+            }
+          } catch(Exception $e) {
+            
+            echo 'Error:'.$e;
+            ?><br><a class=""  href='logout.php'>Try Again</a><?php
+          }
+        
+        
+          
+          
+          
+          
+           /* if($_POST['txtEmail']=='admin@kea.dk'){
+            $curl = curl_init();
+            curl_setopt_array(
+              $curl, array(
+            CURLOPT_URL => 'http://localhost/music-api-testing/admin',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'GET',));
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $obj = json_decode($response, true);
+            $pass=$obj['admin'][0]['Password'];
+            if(password_verify($_POST['password'], $pass)){   
+              $_SESSION['Name']='Admin';
+              $_SESSION['Password']=$pass;
+              $_SESSION['Email']='admin@kea.dk';
+              $_SESSION['UserId']=-1;
+              header('Location: home.php');
+            }else{
+              echo "<div>
+                      <p>User Password is incorrect.</p>
+                      <p><a href='index.php'>Try Again</a></p>
+                      <p><a href='registration.php'>For Register </a></p> 
+                    </div>";
+            }
+          }else{
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://localhost/music-api-testing/customer/'.$_POST['txtEmail'],
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => 'GET',));
+            
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $obj = json_decode($response, true);
+            if($obj['customer']['return']==false){
+              echo "<div>
+                      <p>User Email address is incorrect.</p>
+                      <p><a href='index.php'>Try Again</a></p>
+                      <p><a href='registration.php'>For Register </a></p>
+                    </div>";
+            }else{
+              $pass=$obj['customer']['Password'];
+              if(password_verify($_POST['password'], $pass)){   
+                foreach($obj['customer'] as $key => $value) {
+                  $_SESSION[$key]=$value;
+                }$_SESSION['UserId']=$_SESSION['CustomerId'];
+                $_SESSION['Name']=$_SESSION['FirstName'].' '.$_SESSION['LastName'];
+                header('Location: home.php?login=Success');
+              }else{
+                echo "<div>
+                        <p>Password is incorrect.</p>
+                        <p><a href='index.php'>Try Again</a></p>
+                        <p><a href='registration.php'>For Register </a></p>
+                    </div>";
+              }
+            }
+          }*/
+        }else{
+      ?>
+      
+        <main>
+          <p1># Add password in url if needed.</p1> 
+          <div class ="form">
+              <form action="" method="POST" name="login" >
+                  
+                  <input id="murl" placeholder="MongoDB URL" type="text" name="txtMurl"  required tabindex="1"><br>
+                  <input type="text" id='doc' name="document" placeholder="Document Name" required tabindex="2"><br>
+                  <input type="text" id='coll' name="collection" placeholder="Collection Name" required tabindex="3"><br>
+                  <input name="submitMongo" id='smdb' type="submit" value="Login" tabindex="4">
+              </form>
+              
+          </div>
+          
+          
+          
+        </main>
+
+        <?php 
+        }
+        include_once('footer.php');?>
+
+      
+      
+      
+
+<?php
+
+require_once __DIR__.'/vendor/autoload.php';
+$_POST['txtMurl']='mongodb://localhost:27017';
+$_POST['document']='stmdb';
+$_POST['collection']='collone';
+$doc=$_POST['document'];
+$coll=$_POST['collection'];
+$client = new MongoDB\Client($_POST['txtMurl']);
+//$db = $client->$_POST['document']->$_POST['collection'];
+$db = $client->$doc->$coll;
+//$client = new MongoDB\Client('mongodb://localhost:27017');
+//$db = $client->stmdb->collone;
+/*					$insertOneResult = $db->insertOne([
+					'id' =>$last_id,
+					'username' => $username,
+					'email' => $email,
+					'password' => md5($password),
+					]);*/
+                    //$key=array('User'=>'Abul');
+                    //$db = $client->$mdb->$coll;
+                    $document = $db->findOne();  
+                    if(isset($document)){
+                       // $connect_error = False;
+                        echo 'table is  there.';
+                        //if($document['tableNo']!=0){
+                           // $this->table=$document['tableNames'];}
+                      
+                    }
+                    else echo 'not connected.';
+                    ?>

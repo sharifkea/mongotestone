@@ -98,6 +98,10 @@
                 $_SESSION['collection']=$_POST['collection'];
                 $_SESSION['txtMurl']=$_SESSION['Murl'];
                 $_SESSION['empty']=false;
+                $_SESSION['mdbInfo']['txtMurl']=$_SESSION['txtMurl'];
+                $_SESSION['mdbInfo']['collection']=$_SESSION['collection'];
+                $_SESSION['mdbInfo']['document']=$_SESSION['document'];
+                $_SESSION['mdbInfo']['empty']=$_SESSION['empty'];
                 header('Location: home.php');
               }else {
                 echo 'The Collection is not Empty or not configured with RDMS.';
@@ -108,6 +112,10 @@
                 $_SESSION['collection']=$_POST['collection'];
                 $_SESSION['txtMurl']=$_SESSION['Murl'];
                 $_SESSION['empty']=true;
+                $_SESSION['mdbInfo']['txtMurl']=$_SESSION['txtMurl'];
+                $_SESSION['mdbInfo']['collection']=$_SESSION['collection'];
+                $_SESSION['mdbInfo']['document']=$_SESSION['document'];
+                $_SESSION['mdbInfo']['empty']=$_SESSION['empty'];
                 header('Location: home.php');
               }
           
